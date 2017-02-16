@@ -8,7 +8,7 @@
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:srcCompat="@android:color/holo_purple"
+        android:src="@mipmap/map"
         android:id="@+id/imageView" />
 
     <TextView
@@ -17,5 +17,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="end|center"
         android:id="@+id/textView"
-        android:textSize="40dp"/>
+        android:textSize="40dp"
+        android:textColor="@color/colorAccent"
+        android:textStyle="bold"/>
 </FrameLayout>
