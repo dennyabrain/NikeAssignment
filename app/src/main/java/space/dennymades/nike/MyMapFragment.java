@@ -21,7 +21,7 @@ public class MyMapFragment extends Fragment {
         View view = inflater.inflate(R.layout.map_fragment, container, false);
 
         TextView label = (TextView)view.findViewById(R.id.textView);
-        label.setText(""+position);
+        label.setText(position + "Fragment "+position);
 
         return view;
     }

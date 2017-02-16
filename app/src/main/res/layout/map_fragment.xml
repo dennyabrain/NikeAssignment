@@ -16,5 +16,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="end|center"
-        android:id="@+id/textView" />
+        android:id="@+id/textView"
+        android:textSize="40dp"/>
 </FrameLayout>

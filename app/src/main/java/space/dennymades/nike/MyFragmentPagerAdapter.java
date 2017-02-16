@@ -10,7 +10,7 @@ import android.support.v4.app.FragmentPagerAdapter;
  */
 
 public class MyFragmentPagerAdapter extends FragmentPagerAdapter {
-    private final int NUM_PAGES = 8;
+    private final int NUM_PAGES = 7;
 
     public MyFragmentPagerAdapter(FragmentManager fm) {
         super(fm);
@@ -21,7 +21,14 @@ public class MyFragmentPagerAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         MyMapFragment frag = new MyMapFragment();
         Bundle args = new Bundle();
-        args.putInt("name", position);
+        if(position==0){
+            args.putInt("name", 7);
+        }else if(position==8){
+            args.putInt("name", 1);
+        }else{
+            args.putInt("name", position);
+        }
+        //args.putInt("name", position);
         frag.setArguments(args);
         return frag;
     }
