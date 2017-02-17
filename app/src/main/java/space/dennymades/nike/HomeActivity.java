@@ -22,6 +22,7 @@ public class HomeActivity extends AppCompatActivity {
         mViewPager.setAdapter(fragmentAdapter);
         //mViewPager.setPageMargin();
         mViewPager.setOffscreenPageLimit(3);
+        mViewPager.setPageMargin(-65);
 
 //        DisplayMetrics metrics = new DisplayMetrics();
 //        getWindowManager().getDefaultDisplay().getMetrics(metrics);
@@ -41,8 +42,8 @@ public class HomeActivity extends AppCompatActivity {
                 MyCarouselItem item2 = (MyCarouselItem) fragmentAdapter.getExistingItem(position+1).getView();
                 //Fragment frag = fragmentAdapter.getItem(position);
                 if(item!=null){
-                    item.setScale(1.0f-0.3f*positionOffset);
-                    item2.setScale(0.7f+0.3f*positionOffset);
+                    item.setScale(1.3f-0.3f*positionOffset);
+                    item2.setScale(1.0f+0.3f*positionOffset);
                     Log.v(TAG, "in here "+position);
                 }
             }
@@ -55,7 +56,7 @@ public class HomeActivity extends AppCompatActivity {
                     public void run() {
                         setCurrentItemWithDelay(position);
                     }
-                }, 300);
+                }, 450);
             }
 
             @Override

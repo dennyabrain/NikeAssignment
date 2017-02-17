@@ -47,7 +47,7 @@ public class MyFragmentPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public float getPageWidth(int position) {
-        return 1.0f;
+        return 0.75f;
     }
 
 
