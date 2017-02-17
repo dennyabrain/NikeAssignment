@@ -22,7 +22,6 @@ public class MyMapFragment extends Fragment {
 
         TextView label = (TextView)view.findViewById(R.id.textView);
         label.setText(position + "Fragment "+position);
-
         return view;
     }
 
@@ -41,4 +40,6 @@ public class MyMapFragment extends Fragment {
     public void onPause() {
         super.onPause();
     }
+
+
 }

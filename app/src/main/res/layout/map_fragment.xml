@@ -1,14 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<space.dennymades.nike.MyCarouselItem xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="20dp">
+    android:orientation="vertical"
+    android:background="@android:color/holo_green_dark"
+    android:padding="30dp">
 
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:src="@mipmap/map"
+        android:src="@drawable/map_jc"
         android:id="@+id/imageView" />
 
     <TextView
@@ -17,7 +19,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="end|center"
         android:id="@+id/textView"
-        android:textSize="40dp"
+        android:textSize="20dp"
         android:textColor="@color/colorAccent"
         android:textStyle="bold"/>
-</FrameLayout>
+</space.dennymades.nike.MyCarouselItem>

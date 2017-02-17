@@ -11,6 +11,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 
 public class MyFragmentPagerAdapter extends FragmentPagerAdapter {
     private final int NUM_PAGES = 7;
+    private Fragment[] fragments = new Fragment[NUM_PAGES+2];
 
     public MyFragmentPagerAdapter(FragmentManager fm) {
         super(fm);
@@ -30,12 +31,23 @@ public class MyFragmentPagerAdapter extends FragmentPagerAdapter {
         }
         //args.putInt("name", position);
         frag.setArguments(args);
+        fragments[position] = frag;
         return frag;
+    }
+
+    public Fragment getExistingItem(int position){
+        return fragments[position];
     }
 
     @Override
     public int getCount() {
         return NUM_PAGES+2;
+    }
+
+
+    @Override
+    public float getPageWidth(int position) {
+        return 1.0f;
     }
 
 
