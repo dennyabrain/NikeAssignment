@@ -1,6 +1,8 @@
 package space.dennymades.nike;
 
 import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -13,6 +15,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.TextView;
+
+import java.io.IOException;
+import java.util.List;
+import java.util.Locale;
 
 import space.dennymades.nike.GooglePlayService.GooglePlayHelper;
 import space.dennymades.nike.util.PermissionHelper;
@@ -102,6 +108,9 @@ public class HomeActivity extends AppCompatActivity {
                 mGooglePlay.getLastLocation(getApplication());
                 Location loc = mGooglePlay.getLastLocation(getApplicationContext());
                 mTextView.setText(loc.getLatitude()+","+loc.getLongitude());
+
+                String locality = mGooglePlay.getLocality(getApplicationContext(), loc);
+                Log.d(TAG, locality);
             }
         });
 

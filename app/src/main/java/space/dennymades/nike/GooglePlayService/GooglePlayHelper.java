@@ -3,6 +3,8 @@ package space.dennymades.nike.GooglePlayService;
 import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -14,6 +16,10 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
 import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
 import com.google.android.gms.location.LocationServices;
+
+import java.io.IOException;
+import java.util.List;
+import java.util.Locale;
 
 import space.dennymades.nike.util.PermissionHelper;
 
@@ -71,5 +77,26 @@ public class GooglePlayHelper implements ConnectionCallbacks, OnConnectionFailed
         }else{
             return null;
         }
+    }
+
+    public String getLocality(Context context, Location loc){
+        String address="";
+        Geocoder gcd = new Geocoder(context, Locale.getDefault());
+        List<Address> addresses = null;
+        try {
+            addresses = gcd.getFromLocation(loc.getLatitude(), loc.getLongitude(), 1);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        if (addresses.size() > 0)
+        {
+           address = addresses.get(0).getLocality();
+        }
+        else
+        {
+            address = "Location Name unavailable";
+        }
+
+        return address;
     }
 }
