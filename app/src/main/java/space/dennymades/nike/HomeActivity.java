@@ -16,12 +16,20 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
+import org.reactivestreams.Subscriber;
+
 import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 
+import io.reactivex.Scheduler;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 import space.dennymades.nike.GooglePlayService.GooglePlayHelper;
 import space.dennymades.nike.util.PermissionHelper;
+import space.dennymades.nike.util.networking.GooglePlacesService;
+import space.dennymades.nike.util.networking.RetrofitHelper;
+import space.dennymades.nike.util.networking.datamodels.Result;
 
 public class HomeActivity extends AppCompatActivity {
     private final String TAG = this.getClass().getSimpleName();
@@ -30,6 +38,9 @@ public class HomeActivity extends AppCompatActivity {
 
     private GooglePlayHelper mGooglePlay;
     private TextView mTextView;
+
+    private RetrofitHelper mRetrofitHelper;
+    private GooglePlacesService mPlayService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +53,8 @@ public class HomeActivity extends AppCompatActivity {
         }
 
         mTextView = (TextView)findViewById(R.id.tv_locaiton);
+        mRetrofitHelper = new RetrofitHelper();
+        mPlayService = mRetrofitHelper.getPlacesService();
 
         mViewPager = (ViewPager) findViewById(R.id.viewpager);
         final MyFragmentPagerAdapter fragmentAdapter = new MyFragmentPagerAdapter(getSupportFragmentManager());
@@ -66,10 +79,12 @@ public class HomeActivity extends AppCompatActivity {
                 //MyCarouselItem item = (MyCarouselItem) mViewPager.getChildAt(position);
                 MyCarouselItem item = (MyCarouselItem) fragmentAdapter.getExistingItem(position).getView();
                 MyCarouselItem item2 = (MyCarouselItem) fragmentAdapter.getExistingItem(position+1).getView();
+
                 //Fragment frag = fragmentAdapter.getItem(position);
                 if(item!=null){
                     item.setScale(1.3f-0.3f*positionOffset);
                     item2.setScale(1.0f+0.3f*positionOffset);
+
                     Log.v(TAG, "in here "+position);
                 }
             }
@@ -111,6 +126,12 @@ public class HomeActivity extends AppCompatActivity {
 
                 String locality = mGooglePlay.getLocality(getApplicationContext(), loc);
                 Log.d(TAG, locality);
+
+                mPlayService.getPlacesNearby()
+                        .subscribeOn(Schedulers.newThread())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .doOnNext(v->{Log.d(TAG, ""+v);})
+                        .subscribe();
             }
         });
 
