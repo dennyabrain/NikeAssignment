@@ -13,4 +13,8 @@ public class Result {
     @SerializedName("results")
     @Expose
     private List<ResultItem> item;
+
+    public List<ResultItem> getResult(){
+        return item;
+    }
 }

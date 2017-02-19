@@ -17,6 +17,7 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import org.reactivestreams.Subscriber;
+import org.reactivestreams.Subscription;
 
 import java.io.IOException;
 import java.util.List;
@@ -30,6 +31,7 @@ import space.dennymades.nike.util.PermissionHelper;
 import space.dennymades.nike.util.networking.GooglePlacesService;
 import space.dennymades.nike.util.networking.RetrofitHelper;
 import space.dennymades.nike.util.networking.datamodels.Result;
+import space.dennymades.nike.util.networking.datamodels.ResultItem;
 
 public class HomeActivity extends AppCompatActivity {
     private final String TAG = this.getClass().getSimpleName();
@@ -127,11 +129,18 @@ public class HomeActivity extends AppCompatActivity {
                 String locality = mGooglePlay.getLocality(getApplicationContext(), loc);
                 Log.d(TAG, locality);
 
+                //.doOnNext(v->{Log.d(TAG, ""+v);})
+
                 mPlayService.getPlacesNearby()
                         .subscribeOn(Schedulers.newThread())
                         .observeOn(AndroidSchedulers.mainThread())
-                        .doOnNext(v->{Log.d(TAG, ""+v);})
-                        .subscribe();
+                        .subscribe(result->{
+                            Log.d(TAG, "result : "+result);
+                            List<ResultItem> res = result.getResult();
+                            for(int i=0;i<res.size();i++){
+                                Log.d(TAG, "result "+i+" : "+res.get(i).getName());
+                            }
+                        });
             }
         });
 
