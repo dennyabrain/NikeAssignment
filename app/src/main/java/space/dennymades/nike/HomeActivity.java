@@ -47,7 +47,7 @@ public class HomeActivity extends AppCompatActivity {
 
     private boolean placesStored;
 
-    private List<String> placeNames;
+    List<String> placeNames;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -141,7 +141,7 @@ public class HomeActivity extends AppCompatActivity {
 
                 //.doOnNext(v->{Log.d(TAG, ""+v);})
 
-                placeNames = new ArrayList<String>();
+                List<String> placeNames = new ArrayList<String>();
 
                 mPlayService.getPlacesNearby()
                         .subscribeOn(Schedulers.newThread())

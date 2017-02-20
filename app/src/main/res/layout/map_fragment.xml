@@ -7,19 +7,20 @@
     android:background="@android:color/transparent"
     android:padding="30dp">
 
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:src="@drawable/map"
-        android:id="@+id/imageView" />
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:src="@drawable/map_long"
+            android:id="@+id/imageView" />
 
-    <TextView
-        android:text="Fragment 1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="end|center"
-        android:id="@+id/textView"
-        android:textSize="20dp"
-        android:textColor="@color/colorAccent"
-        android:textStyle="bold"/>
+        <TextView
+            android:text="Fragment 1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start|center"
+            android:id="@+id/textView"
+            android:textSize="20dp"
+            android:textColor="@color/colorAccent"
+            android:textStyle="bold"/>
+
 </space.dennymades.nike.MyCarouselItem>
