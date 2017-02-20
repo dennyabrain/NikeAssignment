@@ -56,4 +56,5 @@ public class MyMapFragment extends Fragment {
     public void hideText(){
         label.hideText();
     }
+
 }

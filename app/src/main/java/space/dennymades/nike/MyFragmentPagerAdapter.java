@@ -72,10 +72,10 @@ public class MyFragmentPagerAdapter extends FragmentPagerAdapter {
         placeNames = names;
     }
 
-    public void updateText(int position){
+    public void updateTextOnPageSelect(int position){
         for(int i=0;i<NUM_PAGES+2;i++){
-            if(position!=0 && position!=NUM_PAGES+1){
-                MyMapFragment frag = (MyMapFragment) fragments[i];
+            MyMapFragment frag = (MyMapFragment) fragments[i];
+            if(frag!=null){
                 if(i==position){
                     frag.showText();
                 }else{
@@ -84,4 +84,5 @@ public class MyFragmentPagerAdapter extends FragmentPagerAdapter {
             }
         }
     }
+
 }

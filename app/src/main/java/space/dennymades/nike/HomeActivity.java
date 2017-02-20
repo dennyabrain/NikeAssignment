@@ -94,6 +94,7 @@ public class HomeActivity extends AppCompatActivity {
 
                     Log.v(TAG, "in here "+position);
                 }
+
             }
 
             @Override
@@ -108,11 +109,12 @@ public class HomeActivity extends AppCompatActivity {
 
                 //display place on the currently selected page
 
-                MyMapFragment frag = (MyMapFragment)(fragmentAdapter.getExistingItem(position));
-                if(frag!=null){
-                    frag.showText();
-                    //fragmentAdapter.updateText(position);
-                }
+//                MyMapFragment frag = (MyMapFragment)(fragmentAdapter.getExistingItem(position));
+//                if(frag!=null){
+//                    frag.showText();
+//                    //fragmentAdapter.updateText(position);
+//                }
+                fragmentAdapter.updateTextOnPageSelect(position);
             }
 
             @Override

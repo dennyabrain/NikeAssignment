@@ -3,9 +3,11 @@ package space.dennymades.nike.util;
 import android.animation.Animator;
 import android.animation.ValueAnimator;
 import android.content.Context;
+import android.support.v4.view.animation.FastOutLinearInInterpolator;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.animation.BounceInterpolator;
+import android.view.animation.LinearInterpolator;
 import android.widget.TextView;
 
 /**
@@ -30,7 +32,7 @@ public class AnimatedTextView extends TextView
 
         animatorHide = ValueAnimator.ofFloat(1f, 0f);
         animatorHide.setDuration(500);
-        animatorHide.setInterpolator(new BounceInterpolator());
+        animatorHide.setInterpolator(new FastOutLinearInInterpolator());
         animatorHide.addUpdateListener(this);
         animatorHide.addListener(this);
     }
@@ -52,6 +54,7 @@ public class AnimatedTextView extends TextView
 //        if(animatorHide.isRunning()){
 //            animatorHide.cancel();
 //        }
+
     }
 
     @Override
@@ -71,7 +74,7 @@ public class AnimatedTextView extends TextView
 
     @Override
     public void onAnimationUpdate(ValueAnimator valueAnimator) {
-        Log.d(TAG, "animation updating");
+        //Log.v(TAG, "animation updating");
         this.setAlpha((float)valueAnimator.getAnimatedValue());
     }
 }
