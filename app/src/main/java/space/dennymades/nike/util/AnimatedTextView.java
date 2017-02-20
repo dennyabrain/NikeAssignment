@@ -17,28 +17,41 @@ public class AnimatedTextView extends TextView
         ValueAnimator.AnimatorUpdateListener{
 
     private String TAG = this.getClass().getSimpleName();
-    private ValueAnimator animator;
+    private ValueAnimator animatorShow;
+    private ValueAnimator animatorHide;
 
     public AnimatedTextView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        animator = ValueAnimator.ofFloat(0f, 1f);
-        animator.setDuration(500);
-        animator.setInterpolator(new BounceInterpolator());
-        animator.addUpdateListener(this);
-        animator.addListener(this);
+        animatorShow = ValueAnimator.ofFloat(0f, 1f);
+        animatorShow.setDuration(500);
+        animatorShow.setInterpolator(new BounceInterpolator());
+        animatorShow.addUpdateListener(this);
+        animatorShow.addListener(this);
+
+        animatorHide = ValueAnimator.ofFloat(1f, 0f);
+        animatorHide.setDuration(500);
+        animatorHide.setInterpolator(new BounceInterpolator());
+        animatorHide.addUpdateListener(this);
+        animatorHide.addListener(this);
     }
 
     public void showText(){
-        animator.start();
+        animatorShow.start();
     }
 
     public void hideText(){
-
+        animatorHide.start();
     }
 
     @Override
     public void onAnimationStart(Animator animator) {
         Log.d(TAG, "animation started");
+//        if(animatorShow.isRunning()){
+//            animatorShow.cancel();
+//        }
+//        if(animatorHide.isRunning()){
+//            animatorHide.cancel();
+//        }
     }
 
     @Override

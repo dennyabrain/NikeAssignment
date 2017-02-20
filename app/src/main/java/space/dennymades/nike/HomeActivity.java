@@ -108,14 +108,10 @@ public class HomeActivity extends AppCompatActivity {
 
                 //display place on the currently selected page
 
-
-
-
-
                 MyMapFragment frag = (MyMapFragment)(fragmentAdapter.getExistingItem(position));
                 if(frag!=null){
                     frag.showText();
-                    //fragmentAdapter.updateText();
+                    //fragmentAdapter.updateText(position);
                 }
             }
 

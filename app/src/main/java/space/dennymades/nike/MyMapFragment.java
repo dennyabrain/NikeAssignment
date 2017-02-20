@@ -52,4 +52,8 @@ public class MyMapFragment extends Fragment {
     public void showText(){
         label.showText();
     }
+
+    public void hideText(){
+        label.hideText();
+    }
 }

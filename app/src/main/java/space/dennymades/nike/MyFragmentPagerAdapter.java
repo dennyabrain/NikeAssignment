@@ -73,6 +73,15 @@ public class MyFragmentPagerAdapter extends FragmentPagerAdapter {
     }
 
     public void updateText(int position){
-
+        for(int i=0;i<NUM_PAGES+2;i++){
+            if(position!=0 && position!=NUM_PAGES+1){
+                MyMapFragment frag = (MyMapFragment) fragments[i];
+                if(i==position){
+                    frag.showText();
+                }else{
+                    frag.hideText();
+                }
+            }
+        }
     }
 }
