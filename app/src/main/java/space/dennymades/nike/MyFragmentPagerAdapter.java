@@ -72,5 +72,7 @@ public class MyFragmentPagerAdapter extends FragmentPagerAdapter {
         placeNames = names;
     }
 
+    public void updateText(int position){
 
+    }
 }

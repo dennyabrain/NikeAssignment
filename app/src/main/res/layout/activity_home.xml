@@ -40,6 +40,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:background="@drawable/bg_rounded_button"
+                android:textColor="@color/colorWhite"
+                android:padding="10dp"
                 android:id="@+id/btn_tracks" />
 
         </LinearLayout>

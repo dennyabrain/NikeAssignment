@@ -106,10 +106,17 @@ public class HomeActivity extends AppCompatActivity {
                     }
                 }, 450);
 
-//                MyMapFragment frag = (MyMapFragment)(fragmentAdapter.getExistingItem(position));
-//                if(frag!=null){
-//                    frag.updatePlace();
-//                }
+                //display place on the currently selected page
+
+
+
+
+
+                MyMapFragment frag = (MyMapFragment)(fragmentAdapter.getExistingItem(position));
+                if(frag!=null){
+                    frag.showText();
+                    //fragmentAdapter.updateText();
+                }
             }
 
             @Override
