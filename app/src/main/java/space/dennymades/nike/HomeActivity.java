@@ -24,6 +24,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
@@ -40,7 +42,7 @@ public class HomeActivity extends AppCompatActivity {
     private Button mButton;
 
     private GooglePlayHelper mGooglePlay;
-    private TextView mTextView;
+    private TextView mTextViewMessage;
 
     private RetrofitHelper mRetrofitHelper;
     private GooglePlacesService mPlayService;
@@ -54,12 +56,14 @@ public class HomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
+
+
         boolean permissionGranted = PermissionHelper.checkPermission(this, PermissionHelper.permissions);
         if(!permissionGranted){
             PermissionHelper.seekPermission(this, PermissionHelper.permissions, PermissionHelper.PERMISSION_ALL);
         }
 
-        mTextView = (TextView)findViewById(R.id.tv_locaiton);
+        mTextViewMessage = (TextView)findViewById(R.id.tv_message);
         mRetrofitHelper = new RetrofitHelper();
         mPlayService = mRetrofitHelper.getPlacesService();
 
@@ -139,10 +143,11 @@ public class HomeActivity extends AppCompatActivity {
             public void onClick(View view) {
                 mGooglePlay.getLastLocation(getApplication());
                 Location loc = mGooglePlay.getLastLocation(getApplicationContext());
-                mTextView.setText(loc.getLatitude()+","+loc.getLongitude());
 
                 String locality = mGooglePlay.getLocality(getApplicationContext(), loc);
                 Log.d(TAG, locality);
+
+                mTextViewMessage.setText("showing running tracks around "+locality+"\n ("+loc.getLatitude()+", "+loc.getLongitude()+")");
 
                 //.doOnNext(v->{Log.d(TAG, ""+v);})
 
