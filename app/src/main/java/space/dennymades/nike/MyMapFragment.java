@@ -20,8 +20,8 @@ public class MyMapFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.map_fragment, container, false);
 
-        TextView label = (TextView)view.findViewById(R.id.textView);
-        label.setText(position + "Fragment "+position);
+        //TextView label = (TextView)view.findViewById(R.id.textView);
+        //label.setText(position + "Fragment "+position);
         return view;
     }
 
@@ -41,5 +41,8 @@ public class MyMapFragment extends Fragment {
         super.onPause();
     }
 
-
+    public void updatePlace(String place){
+        TextView label = (TextView) this.getView().findViewById(R.id.textView);
+        label.setText(place);
+    }
 }

@@ -20,6 +20,7 @@ import org.reactivestreams.Subscriber;
 import org.reactivestreams.Subscription;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -43,6 +44,10 @@ public class HomeActivity extends AppCompatActivity {
 
     private RetrofitHelper mRetrofitHelper;
     private GooglePlacesService mPlayService;
+
+    private boolean placesStored;
+
+    private List<String> placeNames;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,6 +105,11 @@ public class HomeActivity extends AppCompatActivity {
                         setCurrentItemWithDelay(position);
                     }
                 }, 450);
+
+//                MyMapFragment frag = (MyMapFragment)(fragmentAdapter.getExistingItem(position));
+//                if(frag!=null){
+//                    frag.updatePlace();
+//                }
             }
 
             @Override
@@ -131,6 +141,8 @@ public class HomeActivity extends AppCompatActivity {
 
                 //.doOnNext(v->{Log.d(TAG, ""+v);})
 
+                placeNames = new ArrayList<String>();
+
                 mPlayService.getPlacesNearby()
                         .subscribeOn(Schedulers.newThread())
                         .observeOn(AndroidSchedulers.mainThread())
@@ -139,8 +151,11 @@ public class HomeActivity extends AppCompatActivity {
                             List<ResultItem> res = result.getResult();
                             for(int i=0;i<res.size();i++){
                                 Log.d(TAG, "result "+i+" : "+res.get(i).getName());
+                                placeNames.add(res.get(i).getName());
                             }
+                            fragmentAdapter.setPlaces(placeNames);
                         });
+
             }
         });
 
