@@ -1,5 +1,7 @@
 package space.dennymades.nike;
 
+import android.animation.Animator;
+import android.animation.ValueAnimator;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
@@ -7,13 +9,20 @@ import android.location.Location;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.support.v4.view.animation.FastOutSlowInInterpolator;
+import android.support.v4.view.animation.LinearOutSlowInInterpolator;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.AnticipateInterpolator;
+import android.view.animation.AnticipateOvershootInterpolator;
+import android.view.animation.BounceInterpolator;
+import android.view.animation.OvershootInterpolator;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import org.reactivestreams.Subscriber;
@@ -51,6 +60,8 @@ public class HomeActivity extends AppCompatActivity {
 
     List<String> placeNames;
 
+    private LinearLayout rootContent;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,6 +77,8 @@ public class HomeActivity extends AppCompatActivity {
         mTextViewMessage = (TextView)findViewById(R.id.tv_message);
         mRetrofitHelper = new RetrofitHelper();
         mPlayService = mRetrofitHelper.getPlacesService();
+
+        rootContent = (LinearLayout)findViewById(R.id.root_content);
 
         mViewPager = (ViewPager) findViewById(R.id.viewpager);
         final MyFragmentPagerAdapter fragmentAdapter = new MyFragmentPagerAdapter(getSupportFragmentManager());
@@ -141,13 +154,55 @@ public class HomeActivity extends AppCompatActivity {
         mButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                int height = (int)Math.floor(rootContent.getHeight()/2.5);
+
+                ValueAnimator anim = ValueAnimator.ofFloat(0f, -1f);
+                anim.setDuration(1000);
+                anim.setInterpolator(new FastOutSlowInInterpolator());
+                anim.start();
+                anim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                    @Override
+                    public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                        Log.d(TAG, "text view should update now");
+                        mTextViewMessage.setTranslationY((float)valueAnimator.getAnimatedValue()*height);
+//                        String text = mTextViewMessage.getText().toString();
+//                        if(text.length()!=0){
+//                            mTextViewMessage.setText(text.subSequence(0, text.length()-1));
+//                        }
+                    }
+                });
+
+
+
+                anim.addListener(new Animator.AnimatorListener() {
+                    @Override
+                    public void onAnimationStart(Animator animator) {
+
+                    }
+
+                    @Override
+                    public void onAnimationEnd(Animator animator) {
+                        //mTextViewMessage.setText("showing running tracks around "+locality+"\n ("+loc.getLatitude()+", "+loc.getLongitude()+")");
+                        mTextViewMessage.setText("running tracks around ");
+                    }
+
+                    @Override
+                    public void onAnimationCancel(Animator animator) {
+
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(Animator animator) {
+
+                    }
+                });
+
                 mGooglePlay.getLastLocation(getApplication());
                 Location loc = mGooglePlay.getLastLocation(getApplicationContext());
 
                 String locality = mGooglePlay.getLocality(getApplicationContext(), loc);
                 Log.d(TAG, locality);
 
-                mTextViewMessage.setText("showing running tracks around "+locality+"\n ("+loc.getLatitude()+", "+loc.getLongitude()+")");
 
                 //.doOnNext(v->{Log.d(TAG, ""+v);})
 
@@ -165,6 +220,26 @@ public class HomeActivity extends AppCompatActivity {
                             }
                             fragmentAdapter.setPlaces(placeNames);
                         });
+
+                //make text animate to   top
+
+
+
+                mViewPager.setAlpha(1);
+                mViewPager.setVisibility(View.VISIBLE);
+                ValueAnimator anim2 = ValueAnimator.ofFloat(0f, 1f);
+                anim2.setDuration(1000);
+                anim2.setInterpolator(new OvershootInterpolator());
+                anim2.start();
+                anim2.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                    @Override
+                    public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                        Log.d(TAG, "text view should update now");
+                        mViewPager.setAlpha((float)valueAnimator.getAnimatedValue());
+                        mViewPager.setScaleX((float)valueAnimator.getAnimatedValue());
+                        mViewPager.setScaleY((float)valueAnimator.getAnimatedValue());
+                    }
+                });
 
             }
         });
