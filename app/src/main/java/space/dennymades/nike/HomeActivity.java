@@ -91,72 +91,13 @@ public class HomeActivity extends AppCompatActivity {
         mViewPager = (ViewPager) findViewById(R.id.viewpager);
         final MyFragmentPagerAdapter fragmentAdapter = new MyFragmentPagerAdapter(getSupportFragmentManager());
         mViewPager.setAdapter(fragmentAdapter);
-        //mViewPager.setPageMargin();
+        fragmentAdapter.setViewPager(mViewPager);
         mViewPager.setOffscreenPageLimit(3);
-        //mViewPager.setPageMargin(-65);
+        mViewPager.setPageMargin(-65);
 
-//        DisplayMetrics metrics = new DisplayMetrics();
-//        getWindowManager().getDefaultDisplay().getMetrics(metrics);
-//        int pageMargin = ((metrics.widthPixels / 4) * 2);
-//
-//        mViewPager.setPageMargin(-pageMargin);
+        mViewPager.addOnPageChangeListener(fragmentAdapter);
 
-        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-                Log.v(TAG, "current item : "+mViewPager.getCurrentItem());
-                Log.v(TAG, "position : "+position);
-
-                //set scale of view group
-                //MyCarouselItem item = (MyCarouselItem) mViewPager.getChildAt(position);
-                MyCarouselItem item = (MyCarouselItem) fragmentAdapter.getExistingItem(position).getView();
-                MyCarouselItem item2 = (MyCarouselItem) fragmentAdapter.getExistingItem(position+1).getView();
-
-                //Fragment frag = fragmentAdapter.getItem(position);
-                if(item!=null){
-                    item.setScale(1.3f-0.3f*positionOffset);
-                    item2.setScale(1.0f+0.3f*positionOffset);
-
-                    Log.v(TAG, "in here "+position);
-                }
-
-            }
-
-            @Override
-            public void onPageSelected(final int position) {
-                Log.d(TAG, "on page"+position);
-                mViewPager.postDelayed(new Runnable(){
-                    @Override
-                    public void run() {
-                        setCurrentItemWithDelay(position);
-                    }
-                }, 450);
-
-                //display place on the currently selected page
-
-//                MyMapFragment frag = (MyMapFragment)(fragmentAdapter.getExistingItem(position));
-//                if(frag!=null){
-//                    frag.showText();
-//                    //fragmentAdapter.updateText(position);
-//                }
-                fragmentAdapter.updateTextOnPageSelect(position);
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-
-            }
-
-            private void setCurrentItemWithDelay(int position){
-                if(position==0){
-                    mViewPager.setCurrentItem(7, false);
-                }else if(position==8){
-                    mViewPager.setCurrentItem(1, false);
-                }
-            }
-        });
-
-        mViewPager.setCurrentItem(1, false);
+        mViewPager.setCurrentItem(2, false);
 
 
         //final Observable locationObservable = Observable.create(new Observable.Onsu)
@@ -234,7 +175,7 @@ public class HomeActivity extends AppCompatActivity {
                                 //Log.d(TAG, "result "+i+" : "+res.get(i).getName());
                                 placeNames.add(res.get(i).getName());
                             }
-                            fragmentAdapter.setPlaces(placeNames);
+                            //fragmentAdapter.setPlaces(placeNames);
                         });
 
                 //make text animate to   top

@@ -30,7 +30,6 @@
                     android:textColor="@color/colorAccent"
                     android:fontFamily="sans-serif-thin"
                     android:textStyle="bold"
-                    android:alpha="0"
                     android:layout_weight="3"/>
 
                 <android.support.v4.widget.Space
