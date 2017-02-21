@@ -3,9 +3,11 @@ package space.dennymades.nike;
 import android.animation.Animator;
 import android.animation.ValueAnimator;
 import android.content.pm.PackageManager;
+import android.graphics.drawable.Drawable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -19,6 +21,7 @@ import android.view.View;
 import android.view.animation.AnticipateInterpolator;
 import android.view.animation.AnticipateOvershootInterpolator;
 import android.view.animation.BounceInterpolator;
+import android.view.animation.DecelerateInterpolator;
 import android.view.animation.OvershootInterpolator;
 import android.widget.Button;
 import android.widget.FrameLayout;
@@ -35,10 +38,12 @@ import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.reactivex.Observable;
 import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import space.dennymades.nike.GooglePlayService.GooglePlayHelper;
+import space.dennymades.nike.util.AnimatedTextView;
 import space.dennymades.nike.util.PermissionHelper;
 import space.dennymades.nike.util.networking.GooglePlacesService;
 import space.dennymades.nike.util.networking.RetrofitHelper;
@@ -52,6 +57,7 @@ public class HomeActivity extends AppCompatActivity {
 
     private GooglePlayHelper mGooglePlay;
     private TextView mTextViewMessage;
+    private AnimatedTextView mTextViewResultMessage;
 
     private RetrofitHelper mRetrofitHelper;
     private GooglePlacesService mPlayService;
@@ -77,6 +83,8 @@ public class HomeActivity extends AppCompatActivity {
         mTextViewMessage = (TextView)findViewById(R.id.tv_message);
         mRetrofitHelper = new RetrofitHelper();
         mPlayService = mRetrofitHelper.getPlacesService();
+
+        mTextViewResultMessage = (AnimatedTextView)findViewById(R.id.tv_result_message);
 
         rootContent = (LinearLayout)findViewById(R.id.root_content);
 
@@ -150,29 +158,40 @@ public class HomeActivity extends AppCompatActivity {
 
         mViewPager.setCurrentItem(1, false);
 
+
+        //final Observable locationObservable = Observable.create(new Observable.Onsu)
+
+
         mButton = (Button)findViewById(R.id.btn_tracks);
         mButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Log.d(TAG, "button clicked");
+
+                //replace with rxjvaa
+
+
                 int height = (int)Math.floor(rootContent.getHeight()/2.5);
 
-                ValueAnimator anim = ValueAnimator.ofFloat(0f, -1f);
-                anim.setDuration(1000);
+                ValueAnimator anim = ValueAnimator.ofFloat(1f, 0f);
+                anim.setDuration(250);
                 anim.setInterpolator(new FastOutSlowInInterpolator());
-                anim.start();
+
                 anim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                     @Override
                     public void onAnimationUpdate(ValueAnimator valueAnimator) {
-                        Log.d(TAG, "text view should update now");
-                        mTextViewMessage.setTranslationY((float)valueAnimator.getAnimatedValue()*height);
+                        //Log.d(TAG, "text view should update now");
+                        //mTextViewMessage.setTranslationY((float)valueAnimator.getAnimatedValue()*height);
+
+                        mTextViewMessage.setScaleX((float)valueAnimator.getAnimatedValue());
+                        mTextViewMessage.setScaleY((float)valueAnimator.getAnimatedValue());
+
 //                        String text = mTextViewMessage.getText().toString();
 //                        if(text.length()!=0){
 //                            mTextViewMessage.setText(text.subSequence(0, text.length()-1));
 //                        }
                     }
                 });
-
-
 
                 anim.addListener(new Animator.AnimatorListener() {
                     @Override
@@ -183,7 +202,9 @@ public class HomeActivity extends AppCompatActivity {
                     @Override
                     public void onAnimationEnd(Animator animator) {
                         //mTextViewMessage.setText("showing running tracks around "+locality+"\n ("+loc.getLatitude()+", "+loc.getLongitude()+")");
-                        mTextViewMessage.setText("running tracks around ");
+                        //mTextViewMessage.setText("running tracks around ");
+                        mTextViewResultMessage.setVisibility(View.VISIBLE);
+                        mTextViewResultMessage.showText();
                     }
 
                     @Override
@@ -197,12 +218,7 @@ public class HomeActivity extends AppCompatActivity {
                     }
                 });
 
-                mGooglePlay.getLastLocation(getApplication());
-                Location loc = mGooglePlay.getLastLocation(getApplicationContext());
-
-                String locality = mGooglePlay.getLocality(getApplicationContext(), loc);
-                Log.d(TAG, locality);
-
+                anim.start();
 
                 //.doOnNext(v->{Log.d(TAG, ""+v);})
 
@@ -212,18 +228,16 @@ public class HomeActivity extends AppCompatActivity {
                         .subscribeOn(Schedulers.newThread())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(result->{
-                            Log.d(TAG, "result : "+result);
+                            //Log.d(TAG, "result : "+result);
                             List<ResultItem> res = result.getResult();
                             for(int i=0;i<res.size();i++){
-                                Log.d(TAG, "result "+i+" : "+res.get(i).getName());
+                                //Log.d(TAG, "result "+i+" : "+res.get(i).getName());
                                 placeNames.add(res.get(i).getName());
                             }
                             fragmentAdapter.setPlaces(placeNames);
                         });
 
                 //make text animate to   top
-
-
 
                 mViewPager.setAlpha(1);
                 mViewPager.setVisibility(View.VISIBLE);
@@ -241,6 +255,43 @@ public class HomeActivity extends AppCompatActivity {
                     }
                 });
 
+
+                int btnWidth = mButton.getWidth();
+                ValueAnimator anim3 = ValueAnimator.ofFloat(btnWidth, 0);
+                anim3.setDuration(250);
+                anim3.setInterpolator(new DecelerateInterpolator());
+                anim3.start();
+
+                mButton.setText("OK");
+                anim3.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                    @Override
+                    public void onAnimationUpdate(ValueAnimator valueAnimator) {
+
+                        mButton.setWidth((int)(float)valueAnimator.getAnimatedValue());
+                    }
+                });
+
+                anim3.addListener(new Animator.AnimatorListener() {
+                    @Override
+                    public void onAnimationStart(Animator animator) {
+
+                    }
+
+                    @Override
+                    public void onAnimationEnd(Animator animator) {
+
+                    }
+
+                    @Override
+                    public void onAnimationCancel(Animator animator) {
+
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(Animator animator) {
+
+                    }
+                });
             }
         });
 
@@ -274,5 +325,13 @@ public class HomeActivity extends AppCompatActivity {
         }
     }
 
+    public void doLocationStuff(){
+        //replace with rxjvaa
+        mGooglePlay.getLastLocation(getApplication());
+        Location loc = mGooglePlay.getLastLocation(getApplicationContext());
+
+        String locality = mGooglePlay.getLocality(getApplicationContext(), loc);
+        Log.d(TAG, locality);
+    }
 
 }
