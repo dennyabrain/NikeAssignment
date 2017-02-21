@@ -15,7 +15,8 @@ import space.dennymades.nike.util.AnimatedTextView;
  */
 
 public class MyMapFragment extends Fragment {
-    private int position;
+    private int derivedPosition;
+    private int actualPosition;
     private AnimatedTextView label;
 
     @Nullable
@@ -23,15 +24,20 @@ public class MyMapFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.map_fragment, container, false);
 
+        MyCarouselItem item = (MyCarouselItem)view.findViewById(R.id.root_layout);
+        item.setTag("carouselItem"+derivedPosition);
+        //item.setTag();
+
         label = (AnimatedTextView) view.findViewById(R.id.textView);
-        label.setText(position + "Fragment "+position);
+        label.setText(derivedPosition + "Fragment "+derivedPosition);
         return view;
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        position = getArguments().getInt("name");
+        derivedPosition = getArguments().getInt("derivedPosition");
+        actualPosition = getArguments().getInt("actualPosition");
     }
 
     @Override

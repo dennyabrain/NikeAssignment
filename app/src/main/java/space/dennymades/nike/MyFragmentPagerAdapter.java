@@ -33,7 +33,8 @@ public class MyFragmentPagerAdapter extends FragmentPagerAdapter implements View
         MyMapFragment frag = new MyMapFragment();
         Bundle args = new Bundle();
 
-        args.putInt("name", getPageNumber(position));
+        args.putInt("actualPosition", position);
+        args.putInt("derivedPosition", getPageNumber(position));
 
         if(placeNames!=null){
             if(!placeNames.isEmpty()){
@@ -101,24 +102,40 @@ public class MyFragmentPagerAdapter extends FragmentPagerAdapter implements View
 
     @Override
     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-//        MyCarouselItem item = (MyCarouselItem) getExistingItem(getPageNumber(position)).getView();
-//        MyCarouselItem item2 = (MyCarouselItem) getExistingItem(getPageNumber(position)+1).getView();
+        MyCarouselItem item = (MyCarouselItem) viewPager.findViewWithTag("carouselItem"+getPageNumber(viewPager.getCurrentItem()));
+        MyCarouselItem item2 = (MyCarouselItem) viewPager.findViewWithTag("carouselItem"+getPageNumber(position-1));
+        //MyCarouselItem item3 = (MyCarouselItem) viewPager.findViewWithTag("carouselItem"+getPageNumber(position+1));
+
 //
-//        if(item!=null){
-//            item.setScale(1.3f-0.3f*positionOffset);
-//            item2.setScale(1.0f+0.3f*positionOffset);
-//        }
+        if(item!=null &&item2!=null /*&&item3!=null*/){
+            item.setScale(1.3f-0.3f*positionOffset);
+            //item2.setScale(1.0f+0.3f*positionOffset);
+            //item3.setScale(1.0f-0.3f*positionOffset);
+        }
+
+        //scale shit
+        Log.d(TAG, "current position : "+viewPager.getCurrentItem());
+        Log.d(TAG, "derived position "+getPageNumber(viewPager.getCurrentItem()));
+
+        //hide text on all fragments
     }
 
     @Override
     public void onPageSelected(int position) {
-
+//        for(int i=0+DUPLICATE_PAGES;i<NUM_PAGES+DUPLICATE_PAGES;i++){
+//            if(i!=position){
+//                MyCarouselItem item = (MyCarouselItem) viewPager.findViewWithTag("carouselItem"+getPageNumber(position));
+//                if(item!=null){
+//                    item.setScaleX(1.3f-0.3f);
+//                }
+//            }
+//        }
+        Log.d(TAG, "page selected : "+position);
     }
 
     @Override
     public void onPageScrollStateChanged(int state) {
         if(state==ViewPager.SCROLL_STATE_IDLE){
-            Log.d(TAG, "idle hua");
             setCurrentItemWithDelay(viewPager.getCurrentItem());
         }
     }
@@ -129,9 +146,9 @@ public class MyFragmentPagerAdapter extends FragmentPagerAdapter implements View
 
     private void setCurrentItemWithDelay(int position){
         if(position==1){
-            viewPager.setCurrentItem(7, false);
+            viewPager.setCurrentItem(NUM_PAGES+1, false);
         }else if(position==NUM_PAGES+DUPLICATE_PAGES){
-            viewPager.setCurrentItem(2, false);
+            viewPager.setCurrentItem(DUPLICATE_PAGES-1, false);
         }
     }
 }
