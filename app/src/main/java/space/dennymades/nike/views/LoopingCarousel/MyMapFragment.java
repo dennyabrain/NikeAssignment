@@ -73,6 +73,10 @@ public class MyMapFragment extends Fragment {
         label.hideText();
     }
 
+    public boolean isAlphaOne(){
+        return label.isVisible();
+    }
+
     public void makeInvisible(){
         label.setAlpha(0);
     }

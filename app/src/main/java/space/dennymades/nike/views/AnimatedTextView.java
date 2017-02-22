@@ -46,16 +46,13 @@ public class AnimatedTextView extends TextView
         animatorHide.start();
     }
 
+    public boolean isVisible(){
+        return getAlpha()==1 ? true:false;
+    }
+
     @Override
     public void onAnimationStart(Animator animator) {
         Log.d(TAG, "animation started");
-//        if(animatorShow.isRunning()){
-//            animatorShow.cancel();
-//        }
-//        if(animatorHide.isRunning()){
-//            animatorHide.cancel();
-//        }
-
     }
 
     @Override

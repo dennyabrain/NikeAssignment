@@ -7,6 +7,7 @@ import java.util.List;
 import io.reactivex.Observable;
 import retrofit2.Call;
 import retrofit2.http.GET;
+import retrofit2.http.Query;
 import space.dennymades.nike.util.networking.datamodels.Result;
 import space.dennymades.nike.util.networking.datamodels.ResultItem;
 
@@ -15,6 +16,7 @@ import space.dennymades.nike.util.networking.datamodels.ResultItem;
  */
 
 public interface GooglePlacesService {
-    @GET("maps/api/place/nearbysearch/json?location=40.7348671,-74.0579644&radius=2000&rankby=prominence&type=art_gallery&key=AIzaSyAENGgf-HPf4xJJjMVLeDpw9oJ4L2EiRiI")
-    Observable<Result> getPlacesNearby();
+    @GET("maps/api/place/nearbysearch/json?radius=2000&rankby=prominence&type=art_gallery&key=AIzaSyAENGgf-HPf4xJJjMVLeDpw9oJ4L2EiRiI")
+    Observable<Result> getPlacesNearby(@Query("location") String location);
+    //
 }

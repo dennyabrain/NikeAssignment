@@ -69,18 +69,6 @@ public class MyFragmentPagerAdapter extends FragmentPagerAdapter implements View
         }
     }
 
-
-    public MyMapFragment getExistingItem(int position){
-        MyMapFragment frag = (MyMapFragment) fragments[position];
-        if(placeNames!=null){
-            if(!placeNames.isEmpty()){
-                frag.updatePlace(placeNames.get(position));
-            }
-        }
-        return fragments[position];
-    }
-
-
     @Override
     public int getCount() {
         return NUM_PAGES+2*DUPLICATE_PAGES;
@@ -101,18 +89,6 @@ public class MyFragmentPagerAdapter extends FragmentPagerAdapter implements View
         frag.hideProgressBar();
     }
 
-    public void updateTextOnPageSelect(int position){
-        for(int i=0;i<NUM_PAGES+2;i++){
-            MyMapFragment frag = (MyMapFragment) fragments[i];
-            if(frag!=null){
-                if(i==position){
-                    frag.showText();
-                }else{
-                    frag.hideText();
-                }
-            }
-        }
-    }
 
     @Override
     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -135,15 +111,16 @@ public class MyFragmentPagerAdapter extends FragmentPagerAdapter implements View
         MyMapFragment frag = (MyMapFragment) mFragmentManager.findFragmentByTag(this.getFragmentTag(viewPager.getCurrentItem()));
         if(placeNames!=null){
             frag.updatePlace(placeNames.get(getPageNumber(position)));
-            frag.showText();
             frag.hideProgressBar();
+            if(!frag.isAlphaOne()){
+                frag.showText();
+            }
 
             for(int i=0;i<listSize;i++){
                 if(i!=position){
                     MyMapFragment fragment = (MyMapFragment) mFragmentManager.findFragmentByTag(this.getFragmentTag(i));
                     if(fragment!=null){
                         fragment.hideProgressBar();
-                        //fragment.makeInvisible();
                         fragment.hideText();
                     }
                 }
@@ -155,7 +132,7 @@ public class MyFragmentPagerAdapter extends FragmentPagerAdapter implements View
     @Override
     public void onPageScrollStateChanged(int state) {
         if(state==ViewPager.SCROLL_STATE_IDLE){
-            setCurrentItemWithDelay(viewPager.getCurrentItem());
+            setCurrentItem(viewPager.getCurrentItem());
         }
     }
 
@@ -163,7 +140,7 @@ public class MyFragmentPagerAdapter extends FragmentPagerAdapter implements View
         viewPager = vp;
     }
 
-    private void setCurrentItemWithDelay(int position){
+    private void setCurrentItem(int position){
         if(position==1){
             viewPager.setCurrentItem(NUM_PAGES+1, false);
         }else if(position==NUM_PAGES+DUPLICATE_PAGES){

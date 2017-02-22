@@ -4,6 +4,8 @@ import android.location.Location;
 import android.os.AsyncTask;
 import android.view.View;
 
+import space.dennymades.nike.BackgroundTasks;
+import space.dennymades.nike.HomeActivity;
 import space.dennymades.nike.views.AnimatedTextView;
 
 /**
@@ -12,14 +14,17 @@ import space.dennymades.nike.views.AnimatedTextView;
 
 public class LocationBackgroundTask extends AsyncTask<GooglePlayHelper, Void, LocationHelper> {
     private AnimatedTextView mTextViewResultMessage;
+    private BackgroundTasks mListener;
 
-    public LocationBackgroundTask(AnimatedTextView textView){
+    public LocationBackgroundTask(BackgroundTasks listener, AnimatedTextView textView){
         mTextViewResultMessage = textView;
+        mListener = listener;
     }
 
     @Override
     protected LocationHelper doInBackground(GooglePlayHelper... playHelpers) {
         Location mLocation = playHelpers[0].getLastLocation(playHelpers[0].getContext());
+        mListener.onCompleted(mLocation);
         String mLocality = playHelpers[0].getLocality(playHelpers[0].getContext(), mLocation);
 
         return new LocationHelper(mLocation, mLocality);
@@ -31,6 +36,9 @@ public class LocationBackgroundTask extends AsyncTask<GooglePlayHelper, Void, Lo
         mTextViewResultMessage.setText("showing running tracks around "+locationHelper.getLocality()+"\n("+roundOff(locationHelper.getLocation().getLongitude())+","+roundOff(locationHelper.getLocation().getLatitude())+")");
         mTextViewResultMessage.setVisibility(View.VISIBLE);
         mTextViewResultMessage.showText();
+
+        //signal to HomeActivity that task is over
+
     }
 
     private float roundOff(double val){

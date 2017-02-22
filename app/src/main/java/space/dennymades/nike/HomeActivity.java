@@ -31,7 +31,7 @@ import space.dennymades.nike.util.networking.RetrofitHelper;
 import space.dennymades.nike.util.networking.datamodels.ResultItem;
 import space.dennymades.nike.views.LoopingCarousel.MyFragmentPagerAdapter;
 
-public class HomeActivity extends AppCompatActivity {
+public class HomeActivity extends AppCompatActivity implements BackgroundTasks{
     private final String TAG = this.getClass().getSimpleName();
 
     private ViewPager mViewPager;
@@ -66,8 +66,6 @@ public class HomeActivity extends AppCompatActivity {
         mTextViewResultMessage = (AnimatedTextView)findViewById(R.id.tv_result_message);
         mViewPager = (ViewPager) findViewById(R.id.viewpager);
 
-        mRetrofitHelper = new RetrofitHelper();
-        mPlaceService = mRetrofitHelper.getPlacesService();
         mGooglePlay = new GooglePlayHelper(this);
 
         fragmentAdapter = new MyFragmentPagerAdapter(this, getSupportFragmentManager());
@@ -77,6 +75,8 @@ public class HomeActivity extends AppCompatActivity {
         mViewPager.setPageMargin(-65);
         mViewPager.addOnPageChangeListener(fragmentAdapter);
         mViewPager.setCurrentItem(2, false);
+
+        final BackgroundTasks task = this;
 
         mButton = (Button)findViewById(R.id.btn_tracks);
         mButton.setOnClickListener(new View.OnClickListener() {
@@ -97,20 +97,6 @@ public class HomeActivity extends AppCompatActivity {
                     }
                 });
                 anim.start();
-
-                //fetch nearby places from Google API
-                List<String> placeNames = new ArrayList<String>();
-                mPlaceService.getPlacesNearby()
-                        .subscribeOn(Schedulers.newThread())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(result->{
-                            List<ResultItem> res = result.getResult();
-                            for(int i=0;i<res.size();i++){
-                                Log.d(TAG, "result "+i+" : "+res.get(i).getName());
-                                placeNames.add(res.get(i).getName());
-                            }
-                            fragmentAdapter.setPlaces(placeNames);
-                        });
 
                 //animate viewpager
                 mViewPager.setAlpha(1);
@@ -146,7 +132,7 @@ public class HomeActivity extends AppCompatActivity {
                 });
 
                 //figure out latitude, longitude and locality name
-                new LocationBackgroundTask(mTextViewResultMessage).execute(mGooglePlay);
+                new LocationBackgroundTask(task, mTextViewResultMessage).execute(mGooglePlay);
 
             }
         });
@@ -177,4 +163,29 @@ public class HomeActivity extends AppCompatActivity {
         }
     }
 
+    public void fetchNearbyPlaces(Location location){
+        mRetrofitHelper = new RetrofitHelper();
+        mPlaceService = mRetrofitHelper.getPlacesService();
+
+        String param = location.getLatitude()+","+location.getLongitude();
+        //fetch nearby places from Google API
+        List<String> placeNames = new ArrayList<String>();
+        mPlaceService.getPlacesNearby(param)
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(result->{
+                    List<ResultItem> res = result.getResult();
+                    for(int i=0;i<res.size();i++){
+                        Log.d(TAG, "result "+i+" : "+res.get(i).getName());
+                        placeNames.add(res.get(i).getName());
+                    }
+                    fragmentAdapter.setPlaces(placeNames);
+                });
+    }
+
+    @Override
+    public void onCompleted(Location location) {
+        fetchNearbyPlaces(location);
+        Log.d(TAG, "on completed signal rcvd");
+    }
 }
