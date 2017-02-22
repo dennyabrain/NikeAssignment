@@ -3,70 +3,47 @@ package space.dennymades.nike;
 import android.animation.Animator;
 import android.animation.ValueAnimator;
 import android.content.pm.PackageManager;
-import android.graphics.drawable.Drawable;
-import android.location.Address;
-import android.location.Geocoder;
 import android.location.Location;
-import android.os.Handler;
 import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.animation.FastOutSlowInInterpolator;
-import android.support.v4.view.animation.LinearOutSlowInInterpolator;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
-import android.view.animation.AnticipateInterpolator;
-import android.view.animation.AnticipateOvershootInterpolator;
-import android.view.animation.BounceInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.OvershootInterpolator;
 import android.widget.Button;
-import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import org.reactivestreams.Subscriber;
-import org.reactivestreams.Subscription;
-
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import io.reactivex.Observable;
-import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
-import space.dennymades.nike.GooglePlayService.GooglePlayHelper;
-import space.dennymades.nike.util.AnimatedTextView;
+import space.dennymades.nike.util.GooglePlayService.GooglePlayHelper;
+import space.dennymades.nike.views.AnimatedTextView;
 import space.dennymades.nike.util.PermissionHelper;
 import space.dennymades.nike.util.networking.GooglePlacesService;
 import space.dennymades.nike.util.networking.RetrofitHelper;
-import space.dennymades.nike.util.networking.datamodels.Result;
 import space.dennymades.nike.util.networking.datamodels.ResultItem;
+import space.dennymades.nike.views.LoopingCarousel.MyFragmentPagerAdapter;
 
 public class HomeActivity extends AppCompatActivity {
     private final String TAG = this.getClass().getSimpleName();
+
     private ViewPager mViewPager;
     private Button mButton;
-
-    private GooglePlayHelper mGooglePlay;
     private TextView mTextViewMessage;
     private AnimatedTextView mTextViewResultMessage;
+    private LinearLayout rootContent;
 
+    private GooglePlayHelper mGooglePlay;
     private RetrofitHelper mRetrofitHelper;
     private GooglePlacesService mPlayService;
 
-    private boolean placesStored;
-
-    List<String> placeNames;
-
-    private LinearLayout rootContent;
+    private MyFragmentPagerAdapter fragmentAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,42 +56,27 @@ public class HomeActivity extends AppCompatActivity {
         }
 
         mTextViewMessage = (TextView)findViewById(R.id.tv_message);
+        rootContent = (LinearLayout)findViewById(R.id.root_content);
+        mTextViewResultMessage = (AnimatedTextView)findViewById(R.id.tv_result_message);
+        mViewPager = (ViewPager) findViewById(R.id.viewpager);
+
         mRetrofitHelper = new RetrofitHelper();
         mPlayService = mRetrofitHelper.getPlacesService();
-
         mGooglePlay = new GooglePlayHelper(this);
 
-        mTextViewResultMessage = (AnimatedTextView)findViewById(R.id.tv_result_message);
-
-        rootContent = (LinearLayout)findViewById(R.id.root_content);
-
-        mViewPager = (ViewPager) findViewById(R.id.viewpager);
-        final MyFragmentPagerAdapter fragmentAdapter = new MyFragmentPagerAdapter(this, getSupportFragmentManager());
+        fragmentAdapter = new MyFragmentPagerAdapter(this, getSupportFragmentManager());
         mViewPager.setAdapter(fragmentAdapter);
         fragmentAdapter.setViewPager(mViewPager);
         mViewPager.setOffscreenPageLimit(3);
         mViewPager.setPageMargin(-65);
-
         mViewPager.addOnPageChangeListener(fragmentAdapter);
-
         mViewPager.setCurrentItem(2, false);
-
-
-        //final Observable locationObservable = Observable.create(new Observable.Onsu)
-
 
         mButton = (Button)findViewById(R.id.btn_tracks);
         mButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Log.d(TAG, "button clicked");
-
-
-
-                //replace with rxjvaa
-
-
-                int height = (int)Math.floor(rootContent.getHeight()/2.5);
 
                 ValueAnimator anim = ValueAnimator.ofFloat(1f, 0f);
                 anim.setDuration(250);
@@ -269,12 +231,7 @@ public class HomeActivity extends AppCompatActivity {
     private void doLocationStuff(){
         //replace with rxjvaa
         Location loc = mGooglePlay.getLastLocation(getApplicationContext());
-        //Log.d(TAG, "lat : "+loc.getLatitude());
-
-        //Location loc = mGooglePlay.getLastLocation(getApplicationContext());
-
         String locality = mGooglePlay.getLocality(getApplicationContext(), loc);
-        //Log.d(TAG, locality);
 
         mTextViewResultMessage.setText("showing running tracks around "+locality+"\n("+roundOff(loc.getLongitude())+","+roundOff(loc.getLatitude())+")");
         mTextViewResultMessage.setVisibility(View.VISIBLE);

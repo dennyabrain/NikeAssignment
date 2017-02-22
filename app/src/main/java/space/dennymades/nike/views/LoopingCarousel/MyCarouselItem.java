@@ -1,4 +1,4 @@
-package space.dennymades.nike;
+package space.dennymades.nike.views.LoopingCarousel;
 
 import android.content.Context;
 import android.graphics.Canvas;

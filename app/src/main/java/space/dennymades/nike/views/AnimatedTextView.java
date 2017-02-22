@@ -1,9 +1,10 @@
-package space.dennymades.nike.util;
+package space.dennymades.nike.views;
 
 import android.animation.Animator;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.support.v4.view.animation.FastOutLinearInInterpolator;
+import android.support.v4.view.animation.FastOutSlowInInterpolator;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.animation.BounceInterpolator;
@@ -25,8 +26,8 @@ public class AnimatedTextView extends TextView
     public AnimatedTextView(Context context, AttributeSet attrs) {
         super(context, attrs);
         animatorShow = ValueAnimator.ofFloat(0f, 1f);
-        animatorShow.setDuration(450);
-        animatorShow.setInterpolator(new BounceInterpolator());
+        animatorShow.setDuration(500);
+        animatorShow.setInterpolator(new FastOutSlowInInterpolator());
         animatorShow.addUpdateListener(this);
         animatorShow.addListener(this);
 

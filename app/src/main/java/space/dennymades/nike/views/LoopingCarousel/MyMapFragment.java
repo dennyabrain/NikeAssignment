@@ -1,6 +1,5 @@
-package space.dennymades.nike;
+package space.dennymades.nike.views.LoopingCarousel;
 
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -11,7 +10,9 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import space.dennymades.nike.util.AnimatedTextView;
+import space.dennymades.nike.R;
+import space.dennymades.nike.views.AnimatedTextView;
+import space.dennymades.nike.views.LoopingCarousel.MyCarouselItem;
 
 /**
  * Created by abrain on 2/15/17.

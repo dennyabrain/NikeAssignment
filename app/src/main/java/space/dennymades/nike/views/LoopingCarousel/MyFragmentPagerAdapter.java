@@ -1,7 +1,6 @@
-package space.dennymades.nike;
+package space.dennymades.nike.views.LoopingCarousel;
 
 import android.content.Context;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -10,6 +9,9 @@ import android.support.v4.view.ViewPager;
 import android.util.Log;
 
 import java.util.List;
+
+import space.dennymades.nike.HomeActivity;
+import space.dennymades.nike.R;
 
 /**
  * Created by abrain on 2/15/17.

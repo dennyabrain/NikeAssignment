@@ -1,7 +1,5 @@
-package space.dennymades.nike.GooglePlayService;
+package space.dennymades.nike.util.GooglePlayService;
 
-import android.Manifest;
-import android.app.Activity;
 import android.content.Context;
 import android.location.Address;
 import android.location.Geocoder;
@@ -106,7 +104,7 @@ public class GooglePlayHelper implements ConnectionCallbacks, OnConnectionFailed
         }
         else
         {
-            address = "Location Name unavailable";
+            address = "N/A";
         }
 
         return address;

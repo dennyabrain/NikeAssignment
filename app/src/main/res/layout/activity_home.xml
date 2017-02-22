@@ -14,7 +14,8 @@
         android:layout_weight="1"
         android:clipChildren="false">
 
-        <space.dennymades.nike.util.AnimatedTextView android:layout_width="match_parent"
+        <space.dennymades.nike.views.AnimatedTextView
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/tv_result_message"
             android:visibility="invisible"
