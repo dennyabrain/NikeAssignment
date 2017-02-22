@@ -73,6 +73,7 @@ public class GooglePlayHelper implements ConnectionCallbacks, OnConnectionFailed
         Location location;
         if(permission){
             location = LocationServices.FusedLocationApi.getLastLocation(mClient);
+            Log.d(TAG, ""+location);
             return location;
         }else{
             return null;

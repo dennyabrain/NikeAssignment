@@ -1,5 +1,6 @@
 package space.dennymades.nike;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -22,9 +23,13 @@ public class MyFragmentPagerAdapter extends FragmentPagerAdapter implements View
     private MyMapFragment[] fragments = new MyMapFragment[listSize];
     private List<String> placeNames;
     private ViewPager viewPager;
+    private FragmentManager mFragmentManager;
+    private Context mContext;
 
-    public MyFragmentPagerAdapter(FragmentManager fm) {
+    public MyFragmentPagerAdapter(HomeActivity context, FragmentManager fm) {
         super(fm);
+        mFragmentManager = fm;
+        mContext = context;
     }
 
 
@@ -102,22 +107,17 @@ public class MyFragmentPagerAdapter extends FragmentPagerAdapter implements View
 
     @Override
     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-        MyCarouselItem item = (MyCarouselItem) getExistingItem(position).getView();
-        MyCarouselItem item2 = (MyCarouselItem) viewPager.findViewWithTag("carouselItem"+getPageNumber(position-1));
-        //MyCarouselItem item3 = (MyCarouselItem) viewPager.findViewWithTag("carouselItem"+getPageNumber(position+1));
+        try {
+            if (positionOffset >= 0f && positionOffset <= 1f) {
+                MyCarouselItem cur = getRootView(position);
+                MyCarouselItem next = getRootView(position + 1);
 
-//
-        if(item!=null &&item2!=null /*&&item3!=null*/){
-            //item.setScale(1.0f+0.3f*positionOffset);
-            //item2.setScale(1.0f+0.3f*positionOffset);
-            //item3.setScale(1.0f-0.3f*positionOffset);
+                cur.setScale(1.3f - 0.3f * positionOffset);
+                next.setScale(1.0f + 0.3f * positionOffset);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-
-        //scale shit
-        Log.d(TAG, "current position : "+viewPager.getCurrentItem());
-        Log.d(TAG, "derived position "+getPageNumber(viewPager.getCurrentItem()));
-
-        //hide text on all fragments
     }
 
     @Override
@@ -141,6 +141,17 @@ public class MyFragmentPagerAdapter extends FragmentPagerAdapter implements View
             viewPager.setCurrentItem(NUM_PAGES+1, false);
         }else if(position==NUM_PAGES+DUPLICATE_PAGES){
             viewPager.setCurrentItem(DUPLICATE_PAGES, false);
+        }else{
+
         }
+    }
+
+    private MyCarouselItem getRootView(int position) {
+        return (MyCarouselItem) mFragmentManager.findFragmentByTag(this.getFragmentTag(position))
+                .getView().findViewById(R.id.root_layout);
+    }
+
+    private String getFragmentTag(int position) {
+        return "android:switcher:" + viewPager.getId() + ":" + position;
     }
 }

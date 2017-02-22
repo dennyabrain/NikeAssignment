@@ -73,8 +73,6 @@ public class HomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-
-
         boolean permissionGranted = PermissionHelper.checkPermission(this, PermissionHelper.permissions);
         if(!permissionGranted){
             PermissionHelper.seekPermission(this, PermissionHelper.permissions, PermissionHelper.PERMISSION_ALL);
@@ -84,12 +82,14 @@ public class HomeActivity extends AppCompatActivity {
         mRetrofitHelper = new RetrofitHelper();
         mPlayService = mRetrofitHelper.getPlacesService();
 
+        mGooglePlay = new GooglePlayHelper(this);
+
         mTextViewResultMessage = (AnimatedTextView)findViewById(R.id.tv_result_message);
 
         rootContent = (LinearLayout)findViewById(R.id.root_content);
 
         mViewPager = (ViewPager) findViewById(R.id.viewpager);
-        final MyFragmentPagerAdapter fragmentAdapter = new MyFragmentPagerAdapter(getSupportFragmentManager());
+        final MyFragmentPagerAdapter fragmentAdapter = new MyFragmentPagerAdapter(this, getSupportFragmentManager());
         mViewPager.setAdapter(fragmentAdapter);
         fragmentAdapter.setViewPager(mViewPager);
         mViewPager.setOffscreenPageLimit(3);
@@ -108,6 +108,8 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Log.d(TAG, "button clicked");
+
+
 
                 //replace with rxjvaa
 
@@ -144,8 +146,6 @@ public class HomeActivity extends AppCompatActivity {
                     public void onAnimationEnd(Animator animator) {
                         //mTextViewMessage.setText("showing running tracks around "+locality+"\n ("+loc.getLatitude()+", "+loc.getLongitude()+")");
                         //mTextViewMessage.setText("running tracks around ");
-                        mTextViewResultMessage.setVisibility(View.VISIBLE);
-                        mTextViewResultMessage.showText();
                     }
 
                     @Override
@@ -189,7 +189,7 @@ public class HomeActivity extends AppCompatActivity {
                 anim2.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                     @Override
                     public void onAnimationUpdate(ValueAnimator valueAnimator) {
-                        Log.d(TAG, "text view should update now");
+                        //Log.d(TAG, "text view should update now");
                         mViewPager.setAlpha((float)valueAnimator.getAnimatedValue());
                         mViewPager.setScaleX((float)valueAnimator.getAnimatedValue());
                         mViewPager.setScaleY((float)valueAnimator.getAnimatedValue());
@@ -199,7 +199,7 @@ public class HomeActivity extends AppCompatActivity {
 
                 int btnWidth = mButton.getWidth();
                 ValueAnimator anim3 = ValueAnimator.ofFloat(btnWidth, 0);
-                anim3.setDuration(250);
+                anim3.setDuration(1000);
                 anim3.setInterpolator(new DecelerateInterpolator());
                 anim3.start();
 
@@ -233,11 +233,19 @@ public class HomeActivity extends AppCompatActivity {
 
                     }
                 });
+
+
+                doLocationStuff();
+
             }
+
+
+
         });
 
         //
-        mGooglePlay = new GooglePlayHelper(this);
+
+
 
     }
 
@@ -266,13 +274,19 @@ public class HomeActivity extends AppCompatActivity {
         }
     }
 
-    public void doLocationStuff(){
+    private void doLocationStuff(){
         //replace with rxjvaa
-        mGooglePlay.getLastLocation(getApplication());
         Location loc = mGooglePlay.getLastLocation(getApplicationContext());
+        //Log.d(TAG, "lat : "+loc.getLatitude());
+
+        //Location loc = mGooglePlay.getLastLocation(getApplicationContext());
 
         String locality = mGooglePlay.getLocality(getApplicationContext(), loc);
-        Log.d(TAG, locality);
+        //Log.d(TAG, locality);
+
+        mTextViewResultMessage.setText("showing running tracks around "+locality+"\n["+loc.getLongitude()+","+loc.getLongitude()+"]");
+        mTextViewResultMessage.setVisibility(View.VISIBLE);
+        mTextViewResultMessage.showText();
     }
 
 }

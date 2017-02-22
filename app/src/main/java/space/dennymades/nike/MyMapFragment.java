@@ -25,7 +25,7 @@ public class MyMapFragment extends Fragment {
         View view = inflater.inflate(R.layout.map_fragment, container, false);
 
         MyCarouselItem item = (MyCarouselItem)view.findViewById(R.id.root_layout);
-        item.setTag("carouselItem"+derivedPosition);
+        item.setTag("carouselItem"+actualPosition);
         //item.setTag();
 
         label = (AnimatedTextView) view.findViewById(R.id.textView);
@@ -61,6 +61,10 @@ public class MyMapFragment extends Fragment {
 
     public void hideText(){
         label.hideText();
+    }
+
+    public String returnTag(){
+        return getTag();
     }
 
 }
