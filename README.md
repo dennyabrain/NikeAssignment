@@ -1,5 +1,5 @@
 #Preview of the final App
-![Sneak Peak into the App](http://i.imgur.com/Jr2VN6V.gifv)
+![Sneak Peak into the App](http://i.imgur.com/Jr2VN6V.gif)
 
 [See High-Res Gif](https://www.dropbox.com/s/rvmljablcc9pgbm/nike-screenshot.gif?dl=0)
 
