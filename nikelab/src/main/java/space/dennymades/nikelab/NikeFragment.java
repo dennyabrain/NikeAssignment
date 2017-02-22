@@ -1,6 +1,7 @@
 package space.dennymades.nikelab;
 
 import android.animation.ValueAnimator;
+import android.app.Activity;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -82,6 +83,11 @@ public class NikeFragment extends Fragment implements BackgroundTasks{
             @Override
             public void onClick(View view) {
                 Log.d(TAG, "button clicked");
+
+                if(mButton.getText()=="OK"){
+                    getActivity().finishAffinity();
+                    return;
+                }
 
                 //animate textview
                 ValueAnimator anim = ValueAnimator.ofFloat(1f, 0f);
