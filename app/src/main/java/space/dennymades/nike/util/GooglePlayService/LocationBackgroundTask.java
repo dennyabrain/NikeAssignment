@@ -36,9 +36,6 @@ public class LocationBackgroundTask extends AsyncTask<GooglePlayHelper, Void, Lo
         mTextViewResultMessage.setText("showing running tracks around "+locationHelper.getLocality()+"\n("+roundOff(locationHelper.getLocation().getLongitude())+","+roundOff(locationHelper.getLocation().getLatitude())+")");
         mTextViewResultMessage.setVisibility(View.VISIBLE);
         mTextViewResultMessage.showText();
-
-        //signal to HomeActivity that task is over
-
     }
 
     private float roundOff(double val){
