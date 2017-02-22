@@ -238,15 +238,7 @@ public class HomeActivity extends AppCompatActivity {
                 doLocationStuff();
 
             }
-
-
-
         });
-
-        //
-
-
-
     }
 
     @Override
@@ -281,10 +273,10 @@ public class HomeActivity extends AppCompatActivity {
 
         //Location loc = mGooglePlay.getLastLocation(getApplicationContext());
 
-        //String locality = mGooglePlay.getLocality(getApplicationContext(), loc);
+        String locality = mGooglePlay.getLocality(getApplicationContext(), loc);
         //Log.d(TAG, locality);
 
-        mTextViewResultMessage.setText("showing running tracks around "+"\n("+roundOff(loc.getLongitude())+","+roundOff(loc.getLatitude())+")");
+        mTextViewResultMessage.setText("showing running tracks around "+locality+"\n("+roundOff(loc.getLongitude())+","+roundOff(loc.getLatitude())+")");
         mTextViewResultMessage.setVisibility(View.VISIBLE);
         mTextViewResultMessage.showText();
     }

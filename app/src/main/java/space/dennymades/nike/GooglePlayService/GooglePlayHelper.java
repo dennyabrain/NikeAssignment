@@ -30,6 +30,7 @@ import space.dennymades.nike.util.PermissionHelper;
 public class GooglePlayHelper implements ConnectionCallbacks, OnConnectionFailedListener {
     private final String TAG = this.getClass().getSimpleName();
     private GoogleApiClient mClient;
+    private Context mContext;
 
     public GooglePlayHelper(Context context){
         if(mClient==null){
@@ -39,6 +40,8 @@ public class GooglePlayHelper implements ConnectionCallbacks, OnConnectionFailed
                     .addApi(LocationServices.API)
                     .build();
         }
+
+        mContext = context;
     }
 
     @Override
@@ -69,7 +72,7 @@ public class GooglePlayHelper implements ConnectionCallbacks, OnConnectionFailed
     }
 
     public Location getLastLocation(Context context){
-        boolean permission = (PermissionHelper.checkPermission(context, PermissionHelper.permissions));
+        boolean permission = (PermissionHelper.checkPermission(mContext, PermissionHelper.permissions));
         Location location;
         if(permission){
             location = LocationServices.FusedLocationApi.getLastLocation(mClient);
@@ -82,12 +85,20 @@ public class GooglePlayHelper implements ConnectionCallbacks, OnConnectionFailed
 
     public String getLocality(Context context, Location loc){
         String address="";
-        Geocoder gcd = new Geocoder(context, Locale.getDefault());
+        Geocoder gcd = new Geocoder(mContext, Locale.getDefault());
+
+        if(gcd.isPresent()){
+            Log.d(TAG, "gcd is present");
+        }
+
         List<Address> addresses = null;
         try {
             addresses = gcd.getFromLocation(loc.getLatitude(), loc.getLongitude(), 1);
         } catch (IOException e) {
             e.printStackTrace();
+        }
+        if(addresses==null){
+            return "N/A";
         }
         if (addresses.size() > 0)
         {

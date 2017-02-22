@@ -1,11 +1,13 @@
 package space.dennymades.nike;
 
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -21,6 +23,7 @@ public class MyMapFragment extends Fragment {
     private AnimatedTextView label;
     private String placeName;
     private ProgressBar progressBar;
+    private ImageView imageView;
 
     @Nullable
     @Override
@@ -29,10 +32,10 @@ public class MyMapFragment extends Fragment {
 
         MyCarouselItem item = (MyCarouselItem)view.findViewById(R.id.root_layout);
         item.setTag("carouselItem"+actualPosition);
-        //item.setTag();
 
         label = (AnimatedTextView) view.findViewById(R.id.textView);
         progressBar = (ProgressBar) view.findViewById(R.id.progressBar);
+        imageView = (ImageView) view.findViewById(R.id.imageView);
         //label.setText(derivedPosition + "Fragment "+derivedPosition);
         //label.setText(placeName);
         return view;
@@ -80,5 +83,4 @@ public class MyMapFragment extends Fragment {
     public void hideProgressBar(){
         progressBar.setVisibility(View.GONE);
     }
-
 }

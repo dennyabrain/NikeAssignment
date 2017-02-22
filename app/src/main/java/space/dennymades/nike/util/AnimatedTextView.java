@@ -25,13 +25,13 @@ public class AnimatedTextView extends TextView
     public AnimatedTextView(Context context, AttributeSet attrs) {
         super(context, attrs);
         animatorShow = ValueAnimator.ofFloat(0f, 1f);
-        animatorShow.setDuration(500);
+        animatorShow.setDuration(450);
         animatorShow.setInterpolator(new BounceInterpolator());
         animatorShow.addUpdateListener(this);
         animatorShow.addListener(this);
 
         animatorHide = ValueAnimator.ofFloat(1f, 0f);
-        animatorHide.setDuration(500);
+        animatorHide.setDuration(100);
         animatorHide.setInterpolator(new FastOutLinearInInterpolator());
         animatorHide.addUpdateListener(this);
         animatorHide.addListener(this);
