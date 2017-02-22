@@ -1,6 +1,5 @@
 package space.dennymades.nike;
 
-import android.animation.Animator;
 import android.animation.ValueAnimator;
 import android.content.pm.PackageManager;
 import android.location.Location;
@@ -22,10 +21,12 @@ import java.util.List;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
-import space.dennymades.nike.util.GooglePlayService.GooglePlayHelper;
+import space.dennymades.nike.util.GooglePlayService.LocationBackgroundTask;
+import space.dennymades.nike.util.GooglePlayService.LocationHelper;
 import space.dennymades.nike.views.AnimatedTextView;
 import space.dennymades.nike.util.PermissionHelper;
 import space.dennymades.nike.util.networking.GooglePlacesService;
+import space.dennymades.nike.util.GooglePlayService.GooglePlayHelper;
 import space.dennymades.nike.util.networking.RetrofitHelper;
 import space.dennymades.nike.util.networking.datamodels.ResultItem;
 import space.dennymades.nike.views.LoopingCarousel.MyFragmentPagerAdapter;
@@ -41,9 +42,14 @@ public class HomeActivity extends AppCompatActivity {
 
     private GooglePlayHelper mGooglePlay;
     private RetrofitHelper mRetrofitHelper;
-    private GooglePlacesService mPlayService;
+    private GooglePlacesService mPlaceService;
 
     private MyFragmentPagerAdapter fragmentAdapter;
+
+    private Location mLocation;
+    private String mLocality;
+
+    private LocationHelper mLocationHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,7 +67,7 @@ public class HomeActivity extends AppCompatActivity {
         mViewPager = (ViewPager) findViewById(R.id.viewpager);
 
         mRetrofitHelper = new RetrofitHelper();
-        mPlayService = mRetrofitHelper.getPlacesService();
+        mPlaceService = mRetrofitHelper.getPlacesService();
         mGooglePlay = new GooglePlayHelper(this);
 
         fragmentAdapter = new MyFragmentPagerAdapter(this, getSupportFragmentManager());
@@ -78,60 +84,26 @@ public class HomeActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Log.d(TAG, "button clicked");
 
+                //animate textview
                 ValueAnimator anim = ValueAnimator.ofFloat(1f, 0f);
-                anim.setDuration(250);
-                anim.setInterpolator(new FastOutSlowInInterpolator());
+                anim.setDuration(250)
+                    .setInterpolator(new FastOutSlowInInterpolator());
 
                 anim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                     @Override
                     public void onAnimationUpdate(ValueAnimator valueAnimator) {
-                        //Log.d(TAG, "text view should update now");
-                        //mTextViewMessage.setTranslationY((float)valueAnimator.getAnimatedValue()*height);
-
                         mTextViewMessage.setScaleX((float)valueAnimator.getAnimatedValue());
                         mTextViewMessage.setScaleY((float)valueAnimator.getAnimatedValue());
-
-//                        String text = mTextViewMessage.getText().toString();
-//                        if(text.length()!=0){
-//                            mTextViewMessage.setText(text.subSequence(0, text.length()-1));
-//                        }
                     }
                 });
-
-                anim.addListener(new Animator.AnimatorListener() {
-                    @Override
-                    public void onAnimationStart(Animator animator) {
-
-                    }
-
-                    @Override
-                    public void onAnimationEnd(Animator animator) {
-                        //mTextViewMessage.setText("showing running tracks around "+locality+"\n ("+loc.getLatitude()+", "+loc.getLongitude()+")");
-                        //mTextViewMessage.setText("running tracks around ");
-                    }
-
-                    @Override
-                    public void onAnimationCancel(Animator animator) {
-
-                    }
-
-                    @Override
-                    public void onAnimationRepeat(Animator animator) {
-
-                    }
-                });
-
                 anim.start();
 
-                //.doOnNext(v->{Log.d(TAG, ""+v);})
-
+                //fetch nearby places from Google API
                 List<String> placeNames = new ArrayList<String>();
-
-                mPlayService.getPlacesNearby()
+                mPlaceService.getPlacesNearby()
                         .subscribeOn(Schedulers.newThread())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(result->{
-                            //Log.d(TAG, "result : "+result);
                             List<ResultItem> res = result.getResult();
                             for(int i=0;i<res.size();i++){
                                 Log.d(TAG, "result "+i+" : "+res.get(i).getName());
@@ -140,8 +112,7 @@ public class HomeActivity extends AppCompatActivity {
                             fragmentAdapter.setPlaces(placeNames);
                         });
 
-                //make text animate to   top
-
+                //animate viewpager
                 mViewPager.setAlpha(1);
                 mViewPager.setVisibility(View.VISIBLE);
                 ValueAnimator anim2 = ValueAnimator.ofFloat(0f, 1f);
@@ -158,7 +129,7 @@ public class HomeActivity extends AppCompatActivity {
                     }
                 });
 
-
+                //animate button
                 int btnWidth = mButton.getWidth();
                 ValueAnimator anim3 = ValueAnimator.ofFloat(btnWidth, 0);
                 anim3.setDuration(1000);
@@ -174,30 +145,8 @@ public class HomeActivity extends AppCompatActivity {
                     }
                 });
 
-                anim3.addListener(new Animator.AnimatorListener() {
-                    @Override
-                    public void onAnimationStart(Animator animator) {
-
-                    }
-
-                    @Override
-                    public void onAnimationEnd(Animator animator) {
-
-                    }
-
-                    @Override
-                    public void onAnimationCancel(Animator animator) {
-
-                    }
-
-                    @Override
-                    public void onAnimationRepeat(Animator animator) {
-
-                    }
-                });
-
-
-                doLocationStuff();
+                //figure out latitude, longitude and locality name
+                new LocationBackgroundTask(mTextViewResultMessage).execute(mGooglePlay);
 
             }
         });
@@ -226,20 +175,6 @@ public class HomeActivity extends AppCompatActivity {
                 }
                 break;
         }
-    }
-
-    private void doLocationStuff(){
-        //replace with rxjvaa
-        Location loc = mGooglePlay.getLastLocation(getApplicationContext());
-        String locality = mGooglePlay.getLocality(getApplicationContext(), loc);
-
-        mTextViewResultMessage.setText("showing running tracks around "+locality+"\n("+roundOff(loc.getLongitude())+","+roundOff(loc.getLatitude())+")");
-        mTextViewResultMessage.setVisibility(View.VISIBLE);
-        mTextViewResultMessage.showText();
-    }
-
-    private float roundOff(double val){
-        return Math.round(val*100)/100;
     }
 
 }
