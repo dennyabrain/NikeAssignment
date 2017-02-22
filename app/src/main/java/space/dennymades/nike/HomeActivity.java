@@ -284,9 +284,13 @@ public class HomeActivity extends AppCompatActivity {
         //String locality = mGooglePlay.getLocality(getApplicationContext(), loc);
         //Log.d(TAG, locality);
 
-        mTextViewResultMessage.setText("showing running tracks around "+"\n["+loc.getLongitude()+","+loc.getLongitude()+"]");
+        mTextViewResultMessage.setText("showing running tracks around "+"\n("+roundOff(loc.getLongitude())+","+roundOff(loc.getLatitude())+")");
         mTextViewResultMessage.setVisibility(View.VISIBLE);
         mTextViewResultMessage.showText();
+    }
+
+    private float roundOff(double val){
+        return Math.round(val*100)/100;
     }
 
 }

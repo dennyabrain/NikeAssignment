@@ -69,6 +69,10 @@ public class MyMapFragment extends Fragment {
         label.hideText();
     }
 
+    public void makeInvisible(){
+        label.setAlpha(0);
+    }
+
     public String returnTag(){
         return getTag();
     }

@@ -131,9 +131,21 @@ public class MyFragmentPagerAdapter extends FragmentPagerAdapter implements View
         Log.d(TAG, "page selected : "+position);
         MyMapFragment frag = (MyMapFragment) mFragmentManager.findFragmentByTag(this.getFragmentTag(viewPager.getCurrentItem()));
         if(placeNames!=null){
-            frag.updatePlace(placeNames.get(getPageNumber(viewPager.getCurrentItem())));
+            frag.updatePlace(placeNames.get(getPageNumber(position)));
             frag.showText();
             frag.hideProgressBar();
+
+            for(int i=0;i<listSize;i++){
+                if(i!=position){
+                    MyMapFragment fragment = (MyMapFragment) mFragmentManager.findFragmentByTag(this.getFragmentTag(i));
+                    if(fragment!=null){
+                        fragment.hideProgressBar();
+                        //fragment.makeInvisible();
+                        fragment.hideText();
+                    }
+                }
+            }
+
         }
     }
 
