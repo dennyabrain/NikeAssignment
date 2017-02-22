@@ -48,6 +48,8 @@ public class MyFragmentPagerAdapter extends FragmentPagerAdapter implements View
         }
 
         frag.setArguments(args);
+
+        //frag.showText();
         fragments[position] = frag;
         return frag;
     }
@@ -93,6 +95,7 @@ public class MyFragmentPagerAdapter extends FragmentPagerAdapter implements View
         MyMapFragment frag = (MyMapFragment) mFragmentManager.findFragmentByTag(this.getFragmentTag(viewPager.getCurrentItem()));
         frag.updatePlace(placeNames.get(getPageNumber(viewPager.getCurrentItem())));
         frag.showText();
+        frag.hideProgressBar();
     }
 
     public void updateTextOnPageSelect(int position){
@@ -126,6 +129,12 @@ public class MyFragmentPagerAdapter extends FragmentPagerAdapter implements View
     @Override
     public void onPageSelected(int position) {
         Log.d(TAG, "page selected : "+position);
+        MyMapFragment frag = (MyMapFragment) mFragmentManager.findFragmentByTag(this.getFragmentTag(viewPager.getCurrentItem()));
+        if(placeNames!=null){
+            frag.updatePlace(placeNames.get(getPageNumber(viewPager.getCurrentItem())));
+            frag.showText();
+            frag.hideProgressBar();
+        }
     }
 
     @Override

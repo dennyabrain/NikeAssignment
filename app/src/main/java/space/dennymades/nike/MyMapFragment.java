@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import space.dennymades.nike.util.AnimatedTextView;
@@ -19,6 +20,7 @@ public class MyMapFragment extends Fragment {
     private int actualPosition;
     private AnimatedTextView label;
     private String placeName;
+    private ProgressBar progressBar;
 
     @Nullable
     @Override
@@ -30,8 +32,9 @@ public class MyMapFragment extends Fragment {
         //item.setTag();
 
         label = (AnimatedTextView) view.findViewById(R.id.textView);
+        progressBar = (ProgressBar) view.findViewById(R.id.progressBar);
         //label.setText(derivedPosition + "Fragment "+derivedPosition);
-        label.setText(placeName);
+        //label.setText(placeName);
         return view;
     }
 
@@ -68,6 +71,10 @@ public class MyMapFragment extends Fragment {
 
     public String returnTag(){
         return getTag();
+    }
+
+    public void hideProgressBar(){
+        progressBar.setVisibility(View.GONE);
     }
 
 }

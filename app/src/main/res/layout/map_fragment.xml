@@ -15,6 +15,12 @@
             android:padding="10dp"
             android:id="@+id/imageView" />
 
+        <ProgressBar android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_gravity="center"
+            android:id="@+id/progressBar"
+            android:indeterminate="false"/>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -22,7 +28,7 @@
             android:orientation="horizontal">
 
                 <space.dennymades.nike.util.AnimatedTextView
-                    android:text="Fragment 1"
+                    android:text=" "
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="start|center"
