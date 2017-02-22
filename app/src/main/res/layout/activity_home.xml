@@ -8,84 +8,9 @@
     android:background="@drawable/bg_gradient"
     tools:context="space.dennymades.nike.HomeActivity">
 
-    <LinearLayout
+    <fragment
+        android:name="space.dennymades.nikelab.NikeFragment"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:clipChildren="false">
-
-        <space.dennymades.nike.views.AnimatedTextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/tv_result_message"
-            android:visibility="invisible"
-            android:paddingLeft="40dp"
-            android:paddingRight="40dp"
-            android:paddingTop="10dp"
-            android:text="showing running tracks around you"
-            android:textSize="25dp"
-            android:textAlignment="center"
-            android:textColor="@color/colorWhite"
-            android:fontFamily="sans-serif-condensed"/>
-
-    </LinearLayout>
-
-
-    <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:orientation="vertical"
-            android:layout_weight="4"
-            android:gravity="center"
-            android:id="@+id/root_content"
-            android:clipChildren="false">
-
-            <FrameLayout android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <android.support.v4.view.ViewPager
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="bottom"
-                    android:paddingLeft="60dp"
-                    android:visibility="invisible"
-                    android:clipToPadding="false"
-                    android:id="@+id/viewpager"/>
-
-                <TextView android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/tv_message"
-                    android:paddingLeft="40dp"
-                    android:paddingRight="40dp"
-                    android:paddingTop="10dp"
-                    android:layout_gravity="center_vertical"
-                    android:text="find running tracks near you"
-                    android:textSize="25dp"
-                    android:textAlignment="center"
-                    android:textColor="@color/colorWhite"
-                    android:fontFamily="sans-serif-condensed"/>
-
-            </FrameLayout>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:orientation="vertical"
-            android:layout_weight="1">
-
-            <Button
-                android:text="Show Tracks"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:background="@drawable/bg_rounded_button"
-                android:textColor="@color/colorWhite"
-                android:padding="10dp"
-                android:gravity="center"
-                android:id="@+id/btn_tracks" />
-
-        </LinearLayout>
+        android:layout_height="match_parent"/>
 
 </LinearLayout>
