@@ -175,7 +175,7 @@ public class HomeActivity extends AppCompatActivity {
                                 //Log.d(TAG, "result "+i+" : "+res.get(i).getName());
                                 placeNames.add(res.get(i).getName());
                             }
-                            //fragmentAdapter.setPlaces(placeNames);
+                            fragmentAdapter.setPlaces(placeNames);
                         });
 
                 //make text animate to   top

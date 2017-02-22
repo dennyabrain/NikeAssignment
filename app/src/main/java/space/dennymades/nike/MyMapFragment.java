@@ -18,6 +18,7 @@ public class MyMapFragment extends Fragment {
     private int derivedPosition;
     private int actualPosition;
     private AnimatedTextView label;
+    private String placeName;
 
     @Nullable
     @Override
@@ -29,7 +30,8 @@ public class MyMapFragment extends Fragment {
         //item.setTag();
 
         label = (AnimatedTextView) view.findViewById(R.id.textView);
-        label.setText(derivedPosition + "Fragment "+derivedPosition);
+        //label.setText(derivedPosition + "Fragment "+derivedPosition);
+        label.setText(placeName);
         return view;
     }
 
@@ -38,6 +40,7 @@ public class MyMapFragment extends Fragment {
         super.onCreate(savedInstanceState);
         derivedPosition = getArguments().getInt("derivedPosition");
         actualPosition = getArguments().getInt("actualPosition");
+        placeName = getArguments().getString("placeName");
     }
 
     @Override
