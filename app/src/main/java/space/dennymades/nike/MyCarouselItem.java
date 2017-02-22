@@ -14,7 +14,7 @@ import android.widget.LinearLayout;
 public class MyCarouselItem extends FrameLayout {
     public final static float VIEW_SCALE_BIG = 1.3f;
     public final static float VIEW_SCALE_SMALL = 0.7f;
-    private float mScale=1.3f;
+    private float mScale=1.0f;
 
     @Override
     protected void onDraw(Canvas canvas) {
