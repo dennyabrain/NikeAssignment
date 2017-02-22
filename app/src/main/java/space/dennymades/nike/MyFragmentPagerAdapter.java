@@ -90,6 +90,9 @@ public class MyFragmentPagerAdapter extends FragmentPagerAdapter implements View
 
     public void setPlaces(List<String> names){
         placeNames = names;
+        MyMapFragment frag = (MyMapFragment) mFragmentManager.findFragmentByTag(this.getFragmentTag(getPageNumber(viewPager.getCurrentItem())));
+        frag.updatePlace(placeNames.get(getPageNumber(viewPager.getCurrentItem())));
+        frag.showText();
     }
 
     public void updateTextOnPageSelect(int position){

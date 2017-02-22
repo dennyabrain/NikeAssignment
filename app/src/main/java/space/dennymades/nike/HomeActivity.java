@@ -172,7 +172,7 @@ public class HomeActivity extends AppCompatActivity {
                             //Log.d(TAG, "result : "+result);
                             List<ResultItem> res = result.getResult();
                             for(int i=0;i<res.size();i++){
-                                //Log.d(TAG, "result "+i+" : "+res.get(i).getName());
+                                Log.d(TAG, "result "+i+" : "+res.get(i).getName());
                                 placeNames.add(res.get(i).getName());
                             }
                             fragmentAdapter.setPlaces(placeNames);
@@ -281,10 +281,10 @@ public class HomeActivity extends AppCompatActivity {
 
         //Location loc = mGooglePlay.getLastLocation(getApplicationContext());
 
-        String locality = mGooglePlay.getLocality(getApplicationContext(), loc);
+        //String locality = mGooglePlay.getLocality(getApplicationContext(), loc);
         //Log.d(TAG, locality);
 
-        mTextViewResultMessage.setText("showing running tracks around "+locality+"\n["+loc.getLongitude()+","+loc.getLongitude()+"]");
+        mTextViewResultMessage.setText("showing running tracks around "+"\n["+loc.getLongitude()+","+loc.getLongitude()+"]");
         mTextViewResultMessage.setVisibility(View.VISIBLE);
         mTextViewResultMessage.showText();
     }
